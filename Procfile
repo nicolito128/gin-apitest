@@ -1,1 +1,0 @@
-web: bin/github.com/nicolito128/gin-apitest
