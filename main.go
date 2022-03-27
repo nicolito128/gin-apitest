@@ -25,7 +25,6 @@ func main() {
 	router.GET("/tasks", tasks.GetTasksEndpoint)
 	router.POST("/tasks", tasks.PostTaskEndpoint)
 
-	// Start server
 	router.Run()
 }
 
