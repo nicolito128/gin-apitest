@@ -11,3 +11,16 @@ header {
     max-width: 100vw;
     background: rgba(221, 221, 221, 0.7)
 }
+
+main,footer {
+    margin-left: 2rem;
+    padding: 0.2rem;
+}
+
+footer h2 {
+    font-size: 1rem;
+}
+
+footer ul li a {
+    font-size: 0.8rem;
+}
