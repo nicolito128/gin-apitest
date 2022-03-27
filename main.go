@@ -7,25 +7,27 @@ import (
 )
 
 func main() {
-	router := gin.Default()
+	router := gin.New()
+
+	// Middleware
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
+
 	router.SetTrustedProxies(nil)
 	gin.SetMode(gin.DebugMode)
+
+	// Files
 	router.LoadHTMLGlob("templates/*")
+	router.Static("/static/styles", "./static/styles")
 
-	router.GET("/", useTemplate("index"))
-	router.GET("/about", useTemplate("about"))
-	router.GET("/contact", useTemplate("contact"))
+	router.GET("/", indexEndpoint)
 
-	router.Run()
+	// Start server
+	router.Run(":8080")
 }
 
-func useTemplate(name string) func(c *gin.Context) {
-	file := name + ".html"
-
-	return func(c *gin.Context) {
-		c.HTML(http.StatusOK, file, gin.H{
-			"title": name,
-		})
-	}
-
+func indexEndpoint(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"title": "Welcome! - Go Test",
+	})
 }
