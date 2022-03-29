@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -45,4 +46,20 @@ func CreateTask(ctx *gin.Context) {
 	// Add to the TaskList
 	TaskList = append(TaskList, newTask)
 	ctx.JSONP(http.StatusOK, newTask)
+}
+
+func DeleteTask(ctx *gin.Context) {
+	id := ctx.Param("id")
+	taskID, err := strconv.Atoi(id)
+	if err != nil {
+		fmt.Fprintf(ctx.Writer, "Invalid id.")
+	}
+
+	for i, task := range TaskList {
+		if task.ID == taskID {
+			TaskList = append(TaskList[:i], TaskList[i+1:]...)
+			ctx.String(http.StatusOK, "Task %d deleted succesfully.", taskID)
+			break
+		}
+	}
 }

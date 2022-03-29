@@ -24,6 +24,7 @@ func main() {
 	router.GET("/", indexEndpoint)
 	router.GET("/tasks", tasks.GetTasks)
 	router.POST("/tasks", tasks.CreateTask)
+	router.DELETE("/tasks/:id", tasks.DeleteTask)
 
 	router.Run()
 }
