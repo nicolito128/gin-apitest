@@ -18,24 +18,24 @@ var TaskList []Task = []Task{
 	{1, "Task 1", "Task description."},
 }
 
-func GetTasksEndpoint(c *gin.Context) {
-	c.JSON(http.StatusOK, TaskList)
+func GetTasks(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, TaskList)
 }
 
-func PostTaskEndpoint(c *gin.Context) {
-	header := c.ContentType()
+func CreateTask(ctx *gin.Context) {
+	header := ctx.ContentType()
 	if header != "application/json" {
-		fmt.Fprintf(c.Writer, "Invalid content-type!")
+		fmt.Fprintf(ctx.Writer, "Invalid content-type!")
 		return
 	}
 
-	decoder := json.NewDecoder(c.Request.Body)
+	decoder := json.NewDecoder(ctx.Request.Body)
 	decoder.DisallowUnknownFields()
 
 	var newTask Task
 	err := decoder.Decode(&newTask)
 	if err != nil {
-		fmt.Fprintf(c.Writer, "Decode failed!")
+		fmt.Fprintf(ctx.Writer, "Decode failed!")
 		return
 	}
 
@@ -44,5 +44,5 @@ func PostTaskEndpoint(c *gin.Context) {
 
 	// Add to the TaskList
 	TaskList = append(TaskList, newTask)
-	c.JSONP(http.StatusOK, newTask)
+	ctx.JSONP(http.StatusOK, newTask)
 }

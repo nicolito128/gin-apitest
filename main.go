@@ -22,8 +22,8 @@ func main() {
 	router.Static("/static/styles", "./static/styles")
 
 	router.GET("/", indexEndpoint)
-	router.GET("/tasks", tasks.GetTasksEndpoint)
-	router.POST("/tasks", tasks.PostTaskEndpoint)
+	router.GET("/tasks", tasks.GetTasks)
+	router.POST("/tasks", tasks.CreateTask)
 
 	router.Run()
 }
