@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nicolito128/gin-apitest/tasks"
@@ -15,7 +16,13 @@ func main() {
 	router.Use(gin.Recovery())
 
 	router.SetTrustedProxies(nil)
-	gin.SetMode(gin.DebugMode)
+
+	mode, exists := os.LookupEnv("MODE")
+	if exists && mode == gin.ReleaseMode {
+		gin.SetMode(gin.ReleaseMode)
+	} else {
+		gin.SetMode(gin.DebugMode)
+	}
 
 	// Files
 	router.LoadHTMLGlob("templates/*")
