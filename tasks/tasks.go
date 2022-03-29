@@ -28,6 +28,7 @@ func FindTask(ctx *gin.Context) {
 	taskID, err := strconv.Atoi(id)
 	if err != nil {
 		fmt.Fprintf(ctx.Writer, "Invalid id.")
+		return
 	}
 
 	for _, task := range TaskList {
@@ -68,6 +69,7 @@ func DeleteTask(ctx *gin.Context) {
 	taskID, err := strconv.Atoi(id)
 	if err != nil {
 		fmt.Fprintf(ctx.Writer, "Invalid id.")
+		return
 	}
 
 	for i, task := range TaskList {
@@ -75,6 +77,34 @@ func DeleteTask(ctx *gin.Context) {
 			TaskList = append(TaskList[:i], TaskList[i+1:]...)
 			ctx.String(http.StatusOK, "Task %d deleted succesfully.", taskID)
 			break
+		}
+	}
+}
+
+func UpdateTask(ctx *gin.Context) {
+	id := ctx.Param("id")
+	taskID, err := strconv.Atoi(id)
+	if err != nil {
+		fmt.Fprintf(ctx.Writer, "Invalid id.")
+		return
+	}
+
+	decoder := json.NewDecoder(ctx.Request.Body)
+	decoder.DisallowUnknownFields()
+
+	var newTask Task
+	err = decoder.Decode(&newTask)
+	if err != nil {
+		fmt.Fprintf(ctx.Writer, "Decode failed!")
+		return
+	}
+
+	for i, task := range TaskList {
+		if task.ID == taskID {
+			newTask.ID = task.ID
+			TaskList = append(TaskList[:i], TaskList[i+1:]...)
+			TaskList = append(TaskList, newTask)
+			ctx.String(http.StatusOK, "Task %d updated succesfully!", newTask.ID)
 		}
 	}
 }
