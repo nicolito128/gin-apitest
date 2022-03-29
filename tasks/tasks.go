@@ -23,6 +23,21 @@ func GetTasks(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, TaskList)
 }
 
+func FindTask(ctx *gin.Context) {
+	id := ctx.Param("id")
+	taskID, err := strconv.Atoi(id)
+	if err != nil {
+		fmt.Fprintf(ctx.Writer, "Invalid id.")
+	}
+
+	for _, task := range TaskList {
+		if task.ID == taskID {
+			ctx.JSON(http.StatusOK, task)
+			break
+		}
+	}
+}
+
 func CreateTask(ctx *gin.Context) {
 	header := ctx.ContentType()
 	if header != "application/json" {
