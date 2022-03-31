@@ -1,1 +1,1 @@
-web: bin/gin-apitest/cmd/main.go
+web: bin/gin-apitest/cmd/main
