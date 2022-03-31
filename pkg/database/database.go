@@ -18,7 +18,7 @@ var (
 	port     = os.Getenv("DB_PORT")
 	database = os.Getenv("DB_NAME")
 
-	connectionString = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, database)
+	connectionString = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require", host, port, user, password, database)
 )
 
 func Init() (*sql.DB, error) {
