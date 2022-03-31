@@ -10,19 +10,12 @@ import (
 
 var Db *sql.DB
 
-// Connection vars
 var (
-	password = os.Getenv("DB_PASSWORD")
-	host     = os.Getenv("DB_HOST")
-	user     = os.Getenv("DB_USER")
-	port     = os.Getenv("DB_PORT")
-	database = os.Getenv("DB_NAME")
-
-	connectionString = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require", host, port, user, password, database)
+	connectionURL = os.Getenv("DATABASE_URL")
 )
 
 func Init() (*sql.DB, error) {
-	db, err := sql.Open("postgres", connectionString)
+	db, err := sql.Open("postgres", connectionURL)
 	if err != nil {
 		return nil, err
 	}
