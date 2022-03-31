@@ -1,4 +1,4 @@
-module github.com/nicolito128/gin-apitest
+module github.com/nicolito128/gin-apitest/cmd
 
 go 1.18
 
