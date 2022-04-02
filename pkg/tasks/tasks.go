@@ -110,11 +110,21 @@ func UpdateEndpoint(ctx *gin.Context) {
 		return
 	}
 
-	for i, task := range TaskList {
+	if newTask.Name == "" {
+		fmt.Fprintf(ctx.Writer, "Task name/content invalid: empty place.")
+		return
+	}
+
+	for _, task := range TaskList {
 		if task.ID == taskID {
-			newTask.ID = task.ID
-			TaskList = append(TaskList[:i], TaskList[i+1:]...)
-			TaskList = append(TaskList, newTask)
+			newTask.ID = taskID
+			err = UpdateTask(newTask)
+			if err != nil {
+				fmt.Fprintf(ctx.Writer, "Task update failed.")
+				break
+			}
+
+			TaskList = GetTasks()
 			ctx.String(http.StatusOK, "Task %d updated succesfully!", newTask.ID)
 		}
 	}

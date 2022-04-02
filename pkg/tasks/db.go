@@ -85,3 +85,33 @@ func DeleteTaskById(id int) error {
 
 	return nil
 }
+
+func UpdateTask(t Task) error {
+	query := `
+			UPDATE tasks
+				SET name=($2),
+				content=($3)
+				WHERE id=($1);
+	`
+
+	db := database.GetConnection()
+	defer db.Close()
+
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	result, err := stmt.Exec(t.ID, t.Name, t.Content)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	i, _ := result.RowsAffected()
+	if i != 1 {
+		return errors.New("Error: more than one row affected")
+	}
+
+	return nil
+}
