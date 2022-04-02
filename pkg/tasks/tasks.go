@@ -15,15 +15,13 @@ type Task struct {
 	Content string `json:"content"`
 }
 
-var TaskList []Task = []Task{
-	{1, "Task 1", "Task description."},
-}
+var TaskList = GetTasks()
 
-func GetTasks(ctx *gin.Context) {
+func GetAllEndpoint(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, TaskList)
 }
 
-func FindTask(ctx *gin.Context) {
+func FindEndpoint(ctx *gin.Context) {
 	id := ctx.Param("id")
 	taskID, err := strconv.Atoi(id)
 	if err != nil {
@@ -39,7 +37,7 @@ func FindTask(ctx *gin.Context) {
 	}
 }
 
-func CreateTask(ctx *gin.Context) {
+func CreateEndpoint(ctx *gin.Context) {
 	header := ctx.ContentType()
 	if header != "application/json" {
 		fmt.Fprintf(ctx.Writer, "Invalid content-type!")
@@ -64,7 +62,7 @@ func CreateTask(ctx *gin.Context) {
 	ctx.JSONP(http.StatusOK, newTask)
 }
 
-func DeleteTask(ctx *gin.Context) {
+func DeleteEndpoint(ctx *gin.Context) {
 	id := ctx.Param("id")
 	taskID, err := strconv.Atoi(id)
 	if err != nil {
@@ -81,7 +79,7 @@ func DeleteTask(ctx *gin.Context) {
 	}
 }
 
-func UpdateTask(ctx *gin.Context) {
+func UpdateEndpoint(ctx *gin.Context) {
 	id := ctx.Param("id")
 	taskID, err := strconv.Atoi(id)
 	if err != nil {
