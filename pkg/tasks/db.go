@@ -8,6 +8,7 @@ import (
 	"github.com/nicolito128/gin-apitest/pkg/database"
 )
 
+// GetTasks() returns all tasks saved in the database
 func GetTasks() []Task {
 	query := `SELECT * FROM tasks`
 	db := database.GetConnection()
@@ -33,6 +34,7 @@ func GetTasks() []Task {
 	return list
 }
 
+// 	CreateTask() insert a new Task in the database
 func CreateTask(t Task) error {
 	query := `INSERT INTO 
 				tasks (name, content)
