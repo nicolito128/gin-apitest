@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nicolito128/gin-apitest/pkg/tasks"
+	"github.com/nicolito128/tasks-api/pkg/tasks"
 )
 
 func main() {

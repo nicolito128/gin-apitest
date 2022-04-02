@@ -4,7 +4,7 @@ import (
 	"errors"
 	"log"
 
-	"github.com/nicolito128/gin-apitest/pkg/database"
+	"github.com/nicolito128/tasks-api/pkg/database"
 )
 
 // GetTasks() returns all tasks saved in the database
