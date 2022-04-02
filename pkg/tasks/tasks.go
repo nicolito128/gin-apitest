@@ -48,12 +48,12 @@ func CreateEndpoint(ctx *gin.Context) {
 	decoder.DisallowUnknownFields()
 
 	var newTask Task
-	newTask.ID = 0
 	err := decoder.Decode(&newTask)
 	if err != nil {
 		fmt.Fprintf(ctx.Writer, "Decode failed.")
 		return
 	}
+	newTask.ID = len(TaskList) + 1
 
 	if newTask.Name == "" {
 		fmt.Fprintf(ctx.Writer, "Task name invalid: empty place.")
