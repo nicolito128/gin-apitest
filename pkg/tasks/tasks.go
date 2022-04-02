@@ -40,7 +40,7 @@ func FindEndpoint(ctx *gin.Context) {
 func CreateEndpoint(ctx *gin.Context) {
 	header := ctx.ContentType()
 	if header != "application/json" {
-		fmt.Fprintf(ctx.Writer, "Invalid content-type!")
+		fmt.Fprintf(ctx.Writer, "Invalid content-type.")
 		return
 	}
 
@@ -48,17 +48,25 @@ func CreateEndpoint(ctx *gin.Context) {
 	decoder.DisallowUnknownFields()
 
 	var newTask Task
+	newTask.ID = 0
 	err := decoder.Decode(&newTask)
 	if err != nil {
-		fmt.Fprintf(ctx.Writer, "Decode failed!")
+		fmt.Fprintf(ctx.Writer, "Decode failed.")
 		return
 	}
 
-	// Setting task ID
-	newTask.ID = len(TaskList) + 1
+	if newTask.Name == "" {
+		fmt.Fprintf(ctx.Writer, "Task name invalid: empty place.")
+		return
+	}
 
-	// Add to the TaskList
-	TaskList = append(TaskList, newTask)
+	err = CreateTask(newTask)
+	if err != nil {
+		fmt.Fprintf(ctx.Writer, "Task creation failed.")
+		return
+	}
+
+	TaskList = GetTasks()
 	ctx.JSONP(http.StatusOK, newTask)
 }
 
@@ -70,9 +78,14 @@ func DeleteEndpoint(ctx *gin.Context) {
 		return
 	}
 
-	for i, task := range TaskList {
+	for _, task := range TaskList {
 		if task.ID == taskID {
-			TaskList = append(TaskList[:i], TaskList[i+1:]...)
+			err = DeleteTaskById(taskID)
+			if err != nil {
+				fmt.Fprintf(ctx.Writer, "Task deletion failed.")
+				break
+			}
+
 			ctx.String(http.StatusOK, "Task %d deleted succesfully.", taskID)
 			break
 		}
