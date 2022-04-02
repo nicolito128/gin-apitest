@@ -80,12 +80,13 @@ func DeleteEndpoint(ctx *gin.Context) {
 
 	for _, task := range TaskList {
 		if task.ID == taskID {
-			err = DeleteTaskById(taskID)
+			err = DeleteTaskById(task.ID)
 			if err != nil {
 				fmt.Fprintf(ctx.Writer, "Task deletion failed.")
 				break
 			}
 
+			TaskList = GetTasks()
 			ctx.String(http.StatusOK, "Task %d deleted succesfully.", taskID)
 			break
 		}
