@@ -2,27 +2,19 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
+	"log"
 	"os"
 
 	_ "github.com/lib/pq"
 )
 
-var Db *sql.DB
+var dsn = os.Getenv("DATABASE_URL")
 
-var (
-	connectionURL = os.Getenv("DATABASE_URL")
-)
-
-func Init() (*sql.DB, error) {
-	db, err := sql.Open("postgres", connectionURL)
+func GetConnection() *sql.DB {
+	db, err := sql.Open("postgres", dsn)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 
-	Db = db
-	fmt.Println("/*************************************/")
-	fmt.Println("    Database connected succesfully!    ")
-	fmt.Println("/*************************************/")
-	return db, nil
+	return db
 }
