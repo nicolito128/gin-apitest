@@ -13,20 +13,23 @@ var ErrRowsAffected = errors.New("Error: more than one row affected")
 
 var dsn = os.Getenv("DATABASE_URL")
 
-// GetConnection() open de database a return it.
-func GetConnection() *sql.DB {
+// GetConnection() open de database a return it and a error.
+func GetConnection() (*sql.DB, error) {
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return db
+	return db, nil
 }
 
 // Request() executes multiple requests to the database.
 // Prepare the connection (db.Prepare(query)) and then execute the query (db.Exec(stmt).
 func Request(query string, args ...any) error {
-	db := GetConnection()
+	db, err := GetConnection()
+	if err != nil {
+		return err
+	}
 	defer db.Close()
 
 	stmt, err := db.Prepare(query)

@@ -9,7 +9,10 @@ import (
 // GetTasks() return all tasks saved in the database
 func GetTasks() []Task {
 	query := `SELECT * FROM tasks`
-	db := database.GetConnection()
+	db, err := database.GetConnection()
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer db.Close()
 
 	rows, err := db.Query(query)
