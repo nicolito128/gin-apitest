@@ -1,7 +1,6 @@
 package tasks
 
 import (
-	"errors"
 	"log"
 
 	"github.com/nicolito128/tasks-api/pkg/database"
@@ -35,55 +34,17 @@ func GetTasks() []Task {
 
 // 	CreateTask() insert a new Task in the database
 func CreateTask(t Task) error {
-	query := `INSERT INTO 
+	query := `
+			INSERT INTO 
 				tasks (name, content)
-				VALUES ($1, $2)`
-
-	db := database.GetConnection()
-	defer db.Close()
-
-	stmt, err := db.Prepare(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-
-	result, err := stmt.Exec(t.Name, t.Content)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	i, _ := result.RowsAffected()
-	if i != 1 {
-		return errors.New("Error: more than one row affected")
-	}
-
-	return nil
+				VALUES ($1, $2)
+	`
+	return database.Request(query, t.Name, t.Content)
 }
 
 func DeleteTaskById(id int) error {
 	query := `DELETE FROM tasks WHERE id = ($1)`
-
-	db := database.GetConnection()
-	defer db.Close()
-
-	stmt, err := db.Prepare(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-
-	result, err := stmt.Exec(id)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	i, _ := result.RowsAffected()
-	if i != 1 {
-		return errors.New("Error: more than one row affected")
-	}
-
-	return nil
+	return database.Request(query, id)
 }
 
 func UpdateTask(t Task) error {
@@ -93,25 +54,5 @@ func UpdateTask(t Task) error {
 				content=($3)
 				WHERE id=($1);
 	`
-
-	db := database.GetConnection()
-	defer db.Close()
-
-	stmt, err := db.Prepare(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-
-	result, err := stmt.Exec(t.ID, t.Name, t.Content)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	i, _ := result.RowsAffected()
-	if i != 1 {
-		return errors.New("Error: more than one row affected")
-	}
-
-	return nil
+	return database.Request(query, t.ID, t.Name, t.Content)
 }
