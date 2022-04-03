@@ -15,13 +15,3 @@ func Test_GetConnection(t *testing.T) {
 		t.Log("GetConnection() passed the test.")
 	}
 }
-
-func Test_Request(t *testing.T) {
-	err := database.Request("SELECT * FROM tasks LIMIT 1")
-	if err != nil {
-		t.Errorf("Request() returned an error: %s", err)
-		t.Fail()
-	} else {
-		t.Log("Request() passed the test.")
-	}
-}
