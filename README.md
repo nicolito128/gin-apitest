@@ -1,4 +1,6 @@
 # Tasks API
+![Build Status](https://github.com/nicolito128/tasks-api/workflows/Go/badge.svg)
+
 A simple API written in Go with Gin Web Framework. The API use PostgreSQL as database.
 
 ## Deploy
