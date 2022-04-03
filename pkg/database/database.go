@@ -10,7 +10,6 @@ import (
 )
 
 var ErrRowsAffected = errors.New("Error: more than one row affected")
-
 var dsn = os.Getenv("DATABASE_URL")
 
 // GetConnection() open de database a return it and a error.
