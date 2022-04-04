@@ -1,29 +1,24 @@
-package tasks
+package queries
 
 import (
 	"log"
 
-	"github.com/nicolito128/tasks-api/pkg/database"
+	"github.com/nicolito128/tasks-api/domain/database"
+	"github.com/nicolito128/tasks-api/domain/tasks"
 )
 
 // GetTasks() return all tasks saved in the database
-func GetTasks() []Task {
+func GetTasks() []tasks.Task {
 	query := `SELECT * FROM tasks`
-	db, err := database.GetConnection()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	rows, err := db.Query(query)
+	rows, err := database.Query(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
 
-	list := []Task{}
+	list := []tasks.Task{}
 	for rows.Next() {
-		curTask := Task{}
+		curTask := tasks.Task{}
 		err = rows.Scan(&curTask.ID, &curTask.Name, &curTask.Content)
 		if err != nil {
 			log.Fatal(err)
@@ -36,7 +31,7 @@ func GetTasks() []Task {
 }
 
 // 	CreateTask() insert a new Task in the database.
-func CreateTask(t Task) error {
+func CreateTask(t tasks.Task) error {
 	query := `
 			INSERT INTO 
 				tasks (name, content)
@@ -52,7 +47,7 @@ func DeleteTaskById(id int) error {
 }
 
 // UpdateTask() update task in the database with a new task.
-func UpdateTask(t Task) error {
+func UpdateTask(t tasks.Task) error {
 	query := `
 			UPDATE tasks
 				SET name=($2),
