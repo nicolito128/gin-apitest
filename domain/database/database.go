@@ -12,7 +12,7 @@ import (
 var ErrRowsAffected = errors.New("Error: more than one row affected")
 var dsn = os.Getenv("DATABASE_URL")
 
-// GetConnection() open de database a return it and a error.
+// GetConnection() open de database a return it and an error.
 func GetConnection() (*sql.DB, error) {
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
@@ -22,6 +22,7 @@ func GetConnection() (*sql.DB, error) {
 	return db, nil
 }
 
+// Query() executes a query that returns rows. Usually for SELECT sentences.
 func Query(query string, args ...any) (*sql.Rows, error) {
 	db, err := GetConnection()
 	if err != nil {
@@ -37,8 +38,7 @@ func Query(query string, args ...any) (*sql.Rows, error) {
 	return rows, nil
 }
 
-// Request() executes multiple requests to the database.
-// Prepare the connection (db.Prepare(query)) and then execute the query (db.Exec(stmt).
+// Request() executes a prepared statment and returns a error. Usually for INSERT/UPDATE sentences.
 func Request(query string, args ...any) error {
 	db, err := GetConnection()
 	if err != nil {
