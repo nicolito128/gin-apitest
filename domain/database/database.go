@@ -29,7 +29,7 @@ func Query(query string, args ...any) (*sql.Rows, error) {
 	}
 	defer db.Close()
 
-	rows, err := db.Query(query)
+	rows, err := db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
