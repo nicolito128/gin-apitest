@@ -21,7 +21,7 @@ func Tasks_FindEndpoint(ctx *gin.Context) {
 	id := ctx.Param("id")
 	taskID, err := strconv.Atoi(id)
 	if err != nil {
-		fmt.Fprintf(ctx.Writer, "Invalid id.")
+		ctx.String(http.StatusBadRequest, "Invalid id.")
 		return
 	}
 
@@ -40,19 +40,25 @@ func Tasks_CreateEndpoint(ctx *gin.Context) {
 	newTask := tasks.Task{}
 	err := decoder.Decode(&newTask)
 	if err != nil {
+		ctx.Status(http.StatusInternalServerError)
 		fmt.Fprintf(ctx.Writer, "Decode failed.")
+		return
+	}
+
+	if newTask.Name == "" {
+		ctx.String(http.StatusBadRequest, "Invalid task name: empty field.")
+		return
+	}
+
+	if len(newTask.Name) > 50 || len(newTask.Content) > 250 {
+		ctx.String(http.StatusBadRequest, "Invalid task name/content length.")
 		return
 	}
 	newTask.ID = len(TaskList) + 1
 
-	if newTask.Name == "" {
-		fmt.Fprintf(ctx.Writer, "Task name invalid: empty place.")
-		return
-	}
-
 	err = queries.CreateTask(newTask)
 	if err != nil {
-		fmt.Fprintf(ctx.Writer, "Task creation failed.")
+		ctx.String(http.StatusBadRequest, "Task creation failed.")
 		return
 	}
 
@@ -64,7 +70,7 @@ func Tasks_DeleteEndpoint(ctx *gin.Context) {
 	id := ctx.Param("id")
 	taskID, err := strconv.Atoi(id)
 	if err != nil {
-		fmt.Fprintf(ctx.Writer, "Invalid id.")
+		ctx.String(http.StatusBadRequest, "Invalid id.")
 		return
 	}
 
@@ -72,7 +78,7 @@ func Tasks_DeleteEndpoint(ctx *gin.Context) {
 		if task.ID == taskID {
 			err = queries.DeleteTaskById(task.ID)
 			if err != nil {
-				fmt.Fprintf(ctx.Writer, "Task deletion failed.")
+				ctx.String(http.StatusBadRequest, "Task deletion failed.")
 				break
 			}
 
@@ -97,12 +103,18 @@ func Tasks_UpdateEndpoint(ctx *gin.Context) {
 	var newTask tasks.Task
 	err = decoder.Decode(&newTask)
 	if err != nil {
+		ctx.Status(http.StatusBadRequest)
 		fmt.Fprintf(ctx.Writer, "Decode failed!")
 		return
 	}
 
 	if newTask.Name == "" {
-		fmt.Fprintf(ctx.Writer, "Task name/content invalid: empty place.")
+		ctx.String(http.StatusBadRequest, "Invalid task name: empty field.")
+		return
+	}
+
+	if len(newTask.Name) > 50 || len(newTask.Content) > 250 {
+		ctx.String(http.StatusBadRequest, "Invalid task name/content length.")
 		return
 	}
 
@@ -111,7 +123,7 @@ func Tasks_UpdateEndpoint(ctx *gin.Context) {
 			newTask.ID = taskID
 			err = queries.UpdateTask(newTask)
 			if err != nil {
-				fmt.Fprintf(ctx.Writer, "Task update failed.")
+				ctx.String(http.StatusBadRequest, "Task update failed.")
 				break
 			}
 
