@@ -34,12 +34,6 @@ func Tasks_FindEndpoint(ctx *gin.Context) {
 }
 
 func Tasks_CreateEndpoint(ctx *gin.Context) {
-	header := ctx.ContentType()
-	if header != "application/json" {
-		fmt.Fprintf(ctx.Writer, "Invalid content-type.")
-		return
-	}
-
 	decoder := json.NewDecoder(ctx.Request.Body)
 	decoder.DisallowUnknownFields()
 
