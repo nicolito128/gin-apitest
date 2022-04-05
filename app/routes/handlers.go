@@ -26,7 +26,7 @@ func setConfiguration() {
 	}
 }
 
-func IsNotJson(ctx *gin.Context) {
+func isNotJson(ctx *gin.Context) {
 	header := ctx.ContentType()
 	fmt.Println(header)
 	if header != "application/json" {
