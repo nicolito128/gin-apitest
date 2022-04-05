@@ -14,7 +14,11 @@ Get the following packages:
 
 Set a "DATABASE_URL" environment variable. See .env.example for more information on how to configure the database.
 
-Start server:
+Before running the server you can test the code:
+
+    go test -v ./...
+
+Run server:
 
     go run main.go
 
