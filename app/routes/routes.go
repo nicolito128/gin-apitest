@@ -16,7 +16,7 @@ func Run() *gin.Engine {
 
 	router.GET("/tasks", controllers.Tasks_GetAllEndpoint)
 
-	router.GET("/tasks/:id", isNotJson, controllers.Tasks_FindEndpoint)
+	router.GET("/tasks/:id", controllers.Tasks_FindEndpoint)
 
 	router.POST("/tasks", isNotJson, headerOptions, controllers.Tasks_CreateEndpoint)
 
