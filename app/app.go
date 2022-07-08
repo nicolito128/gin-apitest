@@ -5,5 +5,5 @@ import (
 )
 
 func Init() {
-	_ = routes.Run()
+	routes.SetDefault()
 }
